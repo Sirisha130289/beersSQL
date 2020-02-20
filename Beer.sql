@@ -31,7 +31,7 @@ ORDER BY Alcohol DESC ;
 sorted alphabetically. (30)
 SELECT DISTINCT Name
 FROM beers
-WHERE Name LIKE '%white%'
+WHERE Name LIKE '%wit%'
 ORDER BY Name ASC;
 
 #(G) Display all beers with more alcohol than 3 and less than 7 without using 
@@ -53,7 +53,7 @@ FROM brewers;
 # Exercise SELECT Part 2  
 #(A) How many brewers are there in the database? (118) 
 
-SELECT *
+SELECT COUNT(Name) AS total_brewers
 FROM brewers;
 
 #(B) Calculate the average turnover of all brewers.  (114302.1525) 
@@ -62,16 +62,21 @@ FROM brewers;
 
 #(C) Give the lowest, medium and highest alcohol content of the beers in Table 1 instruction. (0,5.8706, 15) 
 
-SELECT MIN(Alcohol) AS minimum ,MAX(Alcohol) AS maximum, AVG(Alcohol) AS medium
+SELECT MIN(Alcohol) AS minimum ,MAX(Alcohol) AS maximum, TRUNCATE(AVG(Alcohol),4) AS medium
 FROM beers;
 
 #(D) Calculate the average turnover of all brewers in the province of Brabant 
 # (Postal codes beginning with 1) but ignore the brewery 'Palm'. (39525.7143) 
-
+#1
 SELECT AVG(Turnover) AS avg_turnover_brabant
 FROM brewers
 WHERE ZipCode LIKE '1%'
-AND Name!='Palm';
+AND Name NOT LIKE 'Palm';
+#2
+SELECT AVG(Turnover) AS avg_turnover_brabant
+FROM brewers
+WHERE LEFT(ZipCode,1) =1
+AND Name NOT LIKE 'Palm';
 
 #(E) Calculate the average alcohol by category (ID). (39 records) 
 SELECT AVG(Alcohol)AS avg_alochol,CategoryId
@@ -83,6 +88,6 @@ GROUP BY CategoryId;
 
 SELECT MAX(Price) AS max_price,CategoryId,Stock
 FROM beers
-WHERE Stock>0
+WHERE Stock<>0
 GROUP BY CategoryId
 HAVING max_price>3;
