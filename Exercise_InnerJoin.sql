@@ -73,3 +73,16 @@ FROM products AS p
          JOIN order_items oi on p.product_id = oi.product_id
 
          LEFT OUTER JOIN orders o on o.order_id = oi.order_id;
+
+
+SELECT p.product_id,p.name,SUM(o.quantity)AS total_sum
+FROM order_items AS o
+LEFT OUTER JOIN products p USING (product_id)
+GROUP BY p.product_id,p.name
+ORDER BY product_id;
+
+# first_name(customer). customer_id(orders),name(shipper)
+SELECT c.first_name,o.customer_id,s.name
+FROM customers AS c
+LEFT JOIN orders AS o USING(customer_id)
+LEFT JOIN shippers AS s USING(shipper_id);
